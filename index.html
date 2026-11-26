@@ -1,0 +1,1131 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>chang.fit 身體評估網站</title>
+<meta name="description" content="chang.fit 身體翻譯員：線上身體評估、動作測試自動角度分析、矯正運動動作庫。">
+<meta property="og:title" content="chang.fit 身體評估網站">
+<meta name="theme-color" content="#6B1E2A">
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&amp;family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&amp;family=Noto+Serif+TC:wght@500;700;900&amp;family=Noto+Sans+TC:wght@300;400;500;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F3EDE3}
+</style>
+<script src="assets/3bef27f4f2b7e1cb057c807c8fda8364.js"></script>
+<script src="assets/00defff399ab76383b6b0d6d81833202.js"></script>
+<script src="morphdom-umd.min.js"></script>
+<script src="dc-lite.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<template id="dc-template">
+
+<div style="width: 100%; min-height: 100vh; background: #F3EDE3; color: #2A1A1C; font-family: 'Noto Sans TC', system-ui, sans-serif; font-weight: 400; line-height: 1.7">
+
+  <!-- ===== 頁首導覽 ===== -->
+  <header style="background: #F3EDE3; border-bottom: 1px solid rgba(42,26,28,0.14)">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 14px 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+      <button onClick="{{goHome}}" style="display: flex; align-items: center; gap: 12px; background: none; border: 0; padding: 6px 0; cursor: pointer; color: {{wine}}; min-height: 44px">
+        <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="14" fill="{{wine}}"></circle><circle cx="15" cy="15" r="11.5" fill="none" stroke="#F3EDE3" stroke-width="0.6"></circle><text x="15" y="20" text-anchor="middle" font-family="Cormorant Garamond, serif" font-style="italic" font-size="14" font-weight="700" fill="#F3EDE3">C</text></svg>
+        <span style="font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 22px; letter-spacing: 0.2em">CHANG.FIT</span>
+      </button>
+      <nav aria-label="主選單" style="flex: 999 1 420px; min-width: 0; display: flex; gap: 2px; overflow-x: auto; justify-content: flex-end">
+        <sc-for list="{{nav}}" as="item" hint-placeholder-count="5">
+          <button onClick="{{item.go}}" style="flex: 0 0 auto; border: 0; border-bottom: 1px solid {{item.line}}; padding: 10px 14px; min-height: 44px; font: inherit; font-size: 14px; letter-spacing: 0.12em; cursor: pointer; background: transparent; color: {{item.color}}">{{item.label}}</button>
+        </sc-for>
+      </nav>
+      <button onClick="{{goAssessStart}}" style="flex: 0 0 auto; display: inline-flex; align-items: center; gap: 8px; border: 0; border-radius: 2px; padding: 0 18px; min-height: 44px; font: inherit; font-size: 14px; font-weight: 500; letter-spacing: 0.14em; cursor: pointer; background: {{wine}}; color: #F3EDE3">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h6v3H9z"></path><path d="M7 5H5v15h14V5h-2"></path><path d="M9 13l2 2 4-4"></path></svg>
+        開始評估
+      </button>
+    </div>
+  </header>
+
+  <main>
+  <!-- ======================= 首頁 ======================= -->
+  <sc-if value="{{isHome}}" hint-placeholder-val="{{ true }}">
+
+    <!-- Hero：酒紅底 -->
+    <section style="position: relative; overflow: hidden; background: radial-gradient(ellipse 80% 75% at 70% 40%, {{wine}} 0%, {{wineDeep}} 70%); color: #F3EDE3">
+      <div style="height: 24px; background: {{wineNight}}"></div>
+      <div style="position: relative; max-width: 1240px; margin: 0 auto; padding: 72px 24px 80px; display: flex; flex-wrap: wrap; align-items: center; gap: 56px">
+        <div style="flex: 1 1 460px; min-width: 0; display: flex; flex-direction: column; gap: 26px">
+          <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 19px; letter-spacing: 0.12em; color: #E2CDB8">SCENE 01 ／ 身體評估</span>
+          <h1 style="margin: 0; display: flex; flex-direction: column; gap: 18px; font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-weight: 700; letter-spacing: 0.02em">
+            <span style="font-size: clamp(34px, 5vw, 60px); line-height: 1.25">有接收到<br>身體給你的警訊嗎？</span>
+            <span style="align-self: flex-start; font-size: clamp(22px, 2.6vw, 32px); font-weight: 500; line-height: 1.4; color: #E2CDB8; border-bottom: 1px solid #F3EDE3; padding-bottom: 6px">連癢都是一種疼痛唷</span>
+          </h1>
+          <p style="margin: 0; font-size: 17px; font-weight: 300; color: #E2CDB8; max-width: 30em">對著鏡頭完成教練設計的標準動作。系統標出關節位置與角度，依評分給你專屬的矯正動作，再用定期評估追蹤改變。</p>
+          <div style="display: flex; flex-wrap: wrap; gap: 14px; padding-top: 6px">
+            <button onClick="{{goAssess}}" style="border: 0; border-radius: 2px; padding: 0 30px; min-height: 52px; font: inherit; font-size: 15px; font-weight: 500; letter-spacing: 0.16em; cursor: pointer; background: #F3EDE3; color: {{wine}}">開始評估</button>
+            <a href="#how" style="display: inline-flex; align-items: center; border-radius: 2px; padding: 0 26px; min-height: 52px; box-sizing: border-box; font-size: 15px; letter-spacing: 0.16em; text-decoration: none; color: #F3EDE3; border: 1px solid rgba(243,237,227,0.45)">了解流程</a>
+          </div>
+          <p style="margin: 0; display: flex; align-items: center; gap: 10px; font-size: 13px; letter-spacing: 0.06em; color: #D9C2B0">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="1"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+            影像只在你的裝置上分析，不會上傳。
+          </p>
+        </div>
+
+        <!-- Hero 視覺：取景框中的骨架＋圓形印章 -->
+        <div style="flex: 1 1 380px; min-width: 0; display: flex; justify-content: center">
+          <div style="position: relative; width: 100%; max-width: 440px">
+            <div style="position: relative; width: 100%; aspect-ratio: 4 / 5; background: {{wineNight}}; border: 1px solid rgba(243,237,227,0.22); overflow: hidden">
+              <svg viewBox="0 0 320 400" width="100%" height="100%" aria-hidden="true" style="filter: drop-shadow(0 0 6px rgba(243,237,227,0.35))">
+                <g stroke="#F3EDE3" stroke-opacity="0.9" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="160" cy="70" r="22"></circle>
+                  <path d="M160 96 Q168 164 160 234"></path>
+                  <path d="M114 116 L206 116"></path>
+                  <path d="M114 116 L104 190 L100 258"></path>
+                  <path d="M206 116 L234 62 L250 22"></path>
+                  <path d="M134 238 L186 238"></path>
+                  <path d="M134 238 L130 316 L128 380"></path>
+                  <path d="M186 238 L190 316 L192 380"></path>
+                </g>
+                <path d="M206 116 L206 178" stroke="#E2CDB8" stroke-width="1" stroke-dasharray="3 5"></path>
+                <path d="M206 162 A46 46 0 0 0 229 76" stroke="#E2CDB8" stroke-width="1.6" fill="none"></path>
+                <g fill="{{wine}}" stroke="#F3EDE3" stroke-width="1.6">
+                  <circle cx="114" cy="116" r="4.5"></circle><circle cx="206" cy="116" r="4.5"></circle>
+                  <circle cx="104" cy="190" r="4.5"></circle><circle cx="234" cy="62" r="4.5"></circle>
+                  <circle cx="100" cy="258" r="4.5"></circle><circle cx="250" cy="22" r="4.5"></circle>
+                  <circle cx="134" cy="238" r="4.5"></circle><circle cx="186" cy="238" r="4.5"></circle>
+                  <circle cx="130" cy="316" r="4.5"></circle><circle cx="190" cy="316" r="4.5"></circle>
+                  <circle cx="128" cy="380" r="4.5"></circle><circle cx="192" cy="380" r="4.5"></circle>
+                  <circle cx="163" cy="164" r="3.5"></circle>
+                </g>
+              </svg>
+              <svg viewBox="0 0 100 125" preserveAspectRatio="none" width="100%" height="100%" aria-hidden="true" style="position: absolute; inset: 0">
+                <g stroke="#F3EDE3" stroke-opacity="0.6" stroke-width="0.4" fill="none">
+                  <path d="M4 12 L4 4 L12 4"></path><path d="M88 4 L96 4 L96 12"></path>
+                  <path d="M4 113 L4 121 L12 121"></path><path d="M88 121 L96 121 L96 113"></path>
+                </g>
+              </svg>
+              <svg width="100%" height="100%" aria-hidden="true" style="position: absolute; inset: 0; opacity: 0.10; pointer-events: none">
+                <filter id="grainHero"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"></feTurbulence></filter>
+                <rect width="100%" height="100%" filter="url(#grainHero)"></rect>
+              </svg>
+              <div style="position: absolute; top: 18px; left: 22px; right: 22px; display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: #E2CDB8">
+                <span><span style="color: #FF8A78">●</span> REC</span>
+                <span>00:00:12:08</span>
+              </div>
+              <div style="position: absolute; left: 22px; bottom: 22px; background: rgba(243,237,227,0.94); color: #2A1A1C; padding: 12px 16px; display: flex; flex-direction: column; gap: 2px">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.22em; color: {{wine}}">R. SHOULDER ELEV</span>
+                <span style="font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-size: 32px; font-weight: 500; line-height: 1.15">—°</span>
+                <span style="font-size: 11px; color: #6E5A55">示意畫面，非實測</span>
+              </div>
+            </div>
+            <!-- 圓形印章 -->
+            <svg viewBox="0 0 120 120" width="112" height="112" aria-hidden="true" style="position: absolute; top: -40px; right: -28px">
+              <defs><path id="sealPath" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"></path></defs>
+              <circle cx="60" cy="60" r="58" fill="#F3EDE3"></circle>
+              <circle cx="60" cy="60" r="54" fill="none" stroke="{{wine}}" stroke-width="0.8"></circle>
+              <circle cx="60" cy="60" r="32" fill="none" stroke="{{wine}}" stroke-width="0.8"></circle>
+              <text font-family="JetBrains Mono, monospace" font-size="8.6" letter-spacing="2.6" fill="{{wine}}"><textPath href="#sealPath">BODY ASSESSMENT · CHANG.FIT · BODY ASSESSMENT · CHANG.FIT ·</textPath></text>
+              <text x="60" y="70" text-anchor="middle" font-family="Cormorant Garamond, serif" font-style="italic" font-size="30" font-weight="700" fill="{{wine}}">C</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div style="height: 24px; background: {{wineNight}}"></div>
+      <svg width="100%" height="100%" aria-hidden="true" style="position: absolute; inset: 0; opacity: 0.06; pointer-events: none">
+        <filter id="grainBand"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"></feTurbulence></filter>
+        <rect width="100%" height="100%" filter="url(#grainBand)"></rect>
+      </svg>
+    </section>
+
+    <!-- 關鍵字字幕帶 -->
+    <div style="background: #F3EDE3; border-bottom: 1px solid rgba(42,26,28,0.14); overflow: hidden">
+      <div style="max-width: 1240px; margin: 0 auto; padding: 18px 24px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px 22px; font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-size: 17px; letter-spacing: 0.18em; color: {{wine}}">
+        <span>肩頸</span><span aria-hidden="true" style="font-size: 9px">◆</span>
+        <span>胸椎</span><span aria-hidden="true" style="font-size: 9px">◆</span>
+        <span>腰背</span><span aria-hidden="true" style="font-size: 9px">◆</span>
+        <span>髖</span><span aria-hidden="true" style="font-size: 9px">◆</span>
+        <span>姿態</span><span aria-hidden="true" style="font-size: 9px">◆</span>
+        <span>活動度</span>
+      </div>
+    </div>
+
+    <!-- 行動呼籲：緊接在主視覺下方 -->
+    <section style="position: relative; overflow: hidden; background: #F3EDE3; text-align: center; border-bottom: 1px solid rgba(42,26,28,0.10)">
+      <div style="max-width: 900px; margin: 0 auto; padding: 80px 24px; display: flex; flex-direction: column; align-items: center; gap: 26px">
+        <div aria-hidden="true" style="display: flex; align-items: center; gap: 14px; width: 220px">
+          <span style="flex: 1; height: 1px; background: {{wine}}; opacity: 0.5"></span>
+          <svg width="10" height="10" viewBox="0 0 10 10"><path d="M5 0 L10 5 L5 10 L0 5 Z" fill="{{wine}}"></path></svg>
+          <span style="flex: 1; height: 1px; background: {{wine}}; opacity: 0.5"></span>
+        </div>
+        <h2 style="margin: 0; font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-size: clamp(30px, 4.4vw, 54px); font-weight: 700; line-height: 1.35; letter-spacing: 0.03em; color: {{wine}}">你的身體，<br>值得被看清楚。</h2>
+        <span style="font-size: 14px; letter-spacing: 0.14em; color: #6E5A55">準備一支手機・一個能拍到全身的空間・貼身衣物</span>
+        <button onClick="{{goAssess}}" style="border: 0; border-radius: 2px; padding: 0 34px; min-height: 52px; font: inherit; font-size: 15px; font-weight: 500; letter-spacing: 0.16em; cursor: pointer; background: {{wine}}; color: #F3EDE3">開始評估</button>
+      </div>
+      <svg width="100%" height="100%" aria-hidden="true" style="position: absolute; inset: 0; opacity: 0.05; pointer-events: none">
+        <filter id="grainEnd"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"></feTurbulence></filter>
+        <rect width="100%" height="100%" filter="url(#grainEnd)"></rect>
+      </svg>
+    </section>
+
+    <!-- 怎麼運作：章節式 -->
+    <section id="how" style="position: relative; background: #F3EDE3">
+      <div style="max-width: 1240px; margin: 0 auto; padding: 96px 24px; display: flex; flex-direction: column; gap: 48px">
+        <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px">
+          <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 19px; letter-spacing: 0.12em; color: {{wine}}">THE PROCESS</span>
+          <h2 style="margin: 0; font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-size: clamp(28px, 3.6vw, 42px); font-weight: 700; letter-spacing: 0.02em">評估的五個章節</h2>
+          <div aria-hidden="true" style="display: flex; align-items: center; gap: 14px; width: 220px">
+            <span style="flex: 1; height: 1px; background: {{wine}}; opacity: 0.5"></span>
+            <svg width="10" height="10" viewBox="0 0 10 10"><path d="M5 0 L10 5 L5 10 L0 5 Z" fill="{{wine}}"></path></svg>
+            <span style="flex: 1; height: 1px; background: {{wine}}; opacity: 0.5"></span>
+          </div>
+          <p style="margin: 0; max-width: 30em; color: #6E5A55; font-weight: 300">每一步都有明確標準。完成後定期再評估，看的是趨勢，不是單次分數。</p>
+        </div>
+        <ol style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0 28px">
+          <li style="border-top: 1px solid {{wine}}; padding: 24px 0; display: flex; flex-direction: column; gap: 12px">
+            <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 60px; font-weight: 500; line-height: 1; color: {{wine}}">01</span>
+            <strong style="font-size: 18px; font-weight: 500; letter-spacing: 0.06em">安全篩檢</strong>
+            <span style="color: #6E5A55; font-size: 14px; font-weight: 300">先排除需要就醫的警訊，安全第一。</span>
+          </li>
+          <li style="border-top: 1px solid {{wine}}; padding: 24px 0; display: flex; flex-direction: column; gap: 12px">
+            <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 60px; font-weight: 500; line-height: 1; color: {{wine}}">02</span>
+            <strong style="font-size: 18px; font-weight: 500; letter-spacing: 0.06em">自填問卷</strong>
+            <span style="color: #6E5A55; font-size: 14px; font-weight: 300">疼痛程度、生活習慣與改善目標。</span>
+          </li>
+          <li style="border-top: 1px solid {{wine}}; padding: 24px 0; display: flex; flex-direction: column; gap: 12px">
+            <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 60px; font-weight: 500; line-height: 1; color: {{wine}}">03</span>
+            <strong style="font-size: 18px; font-weight: 500; letter-spacing: 0.06em">動作測試</strong>
+            <span style="color: #6E5A55; font-size: 14px; font-weight: 300">對著鏡頭做標準動作，系統標出關節與角度。</span>
+          </li>
+          <li style="border-top: 1px solid {{wine}}; padding: 24px 0; display: flex; flex-direction: column; gap: 12px">
+            <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 60px; font-weight: 500; line-height: 1; color: {{wine}}">04</span>
+            <strong style="font-size: 18px; font-weight: 500; letter-spacing: 0.06em">評分分級</strong>
+            <span style="color: #6E5A55; font-size: 14px; font-weight: 300">每個動作 0–5 分，找出最需要改善的部位。</span>
+          </li>
+          <li style="border-top: 1px solid {{wine}}; padding: 24px 0; display: flex; flex-direction: column; gap: 12px">
+            <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 60px; font-weight: 500; line-height: 1; color: {{wine}}">05</span>
+            <strong style="font-size: 18px; font-weight: 500; letter-spacing: 0.06em">動作處方</strong>
+            <span style="color: #6E5A55; font-size: 14px; font-weight: 300">依結果給你矯正動作與進退階，附教練示範影片。</span>
+          </li>
+        </ol>
+      </div>
+      <svg width="100%" height="100%" aria-hidden="true" style="position: absolute; inset: 0; opacity: 0.05; pointer-events: none">
+        <filter id="grainPaper"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"></feTurbulence></filter>
+        <rect width="100%" height="100%" filter="url(#grainPaper)"></rect>
+      </svg>
+    </section>
+
+    <!-- 動作庫預覽 -->
+    <section style="background: #EAE1D3; border-top: 1px solid rgba(42,26,28,0.10)">
+      <div style="max-width: 1240px; margin: 0 auto; padding: 96px 24px; display: flex; flex-direction: column; gap: 40px">
+        <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px">
+          <div style="display: flex; flex-direction: column; gap: 14px">
+            <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 19px; letter-spacing: 0.12em; color: {{wine}}">THE LIBRARY</span>
+            <h2 style="margin: 0; font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-size: clamp(28px, 3.6vw, 42px); font-weight: 700; letter-spacing: 0.02em">動作庫</h2>
+          </div>
+          <button onClick="{{goLibrary}}" style="border: 1px solid {{wine}}; background: transparent; border-radius: 2px; padding: 0 22px; min-height: 46px; font: inherit; font-size: 14px; letter-spacing: 0.16em; cursor: pointer; color: {{wine}}">看全部動作</button>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 28px">
+          <sc-for list="{{previewCards}}" as="card" hint-placeholder-count="3">
+            <article style="display: flex; flex-direction: column; gap: 16px">
+              <sc-if value="{{card.video}}" hint-placeholder-val="{{ false }}">
+                <button onClick="{{card.open}}" aria-label="播放{{card.name}}示範影片" style="position: relative; display: block; width: 100%; aspect-ratio: 2.39 / 1; padding: 0; border: 0; cursor: pointer; background: {{wineDeep}}; overflow: hidden">
+                  <img src="{{card.poster}}" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+                  <span style="position: absolute; inset: 0; background: rgba(20,6,9,0.22)"></span>
+                  <span style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 52px; height: 52px; border-radius: 50%; background: rgba(243,237,227,0.92); color: {{wine}}; display: flex; align-items: center; justify-content: center">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
+                  </span>
+                  <span style="position: absolute; left: 12px; bottom: 10px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: #F3EDE3">DEMO</span>
+                  <span style="position: absolute; right: 12px; bottom: 10px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #F3EDE3; background: rgba(20,6,9,0.6); padding: 2px 6px">{{card.dur}}</span>
+                </button>
+              </sc-if>
+              <sc-if value="{{card.noVideo}}" hint-placeholder-val="{{ true }}">
+                <div style="position: relative; aspect-ratio: 2.39 / 1; background: {{wineDeep}}; display: flex; align-items: center; justify-content: center">
+                  <span style="width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(243,237,227,0.6); display: flex; align-items: center; justify-content: center; color: #F3EDE3">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
+                  </span>
+                  <span style="position: absolute; left: 12px; bottom: 10px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: #E2CDB8">DEMO</span>
+                </div>
+              </sc-if>
+              <div style="display: flex; flex-direction: column; gap: 6px">
+                <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 17px; letter-spacing: 0.08em; color: {{wine}}">CH. {{card.region}}</span>
+                <strong style="font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-size: 20px; font-weight: 500">{{card.name}}</strong>
+                <span style="font-size: 14px; font-weight: 300; color: #6E5A55">{{card.desc}}</span>
+              </div>
+            </article>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <!-- 活動度標準入口 -->
+    <section style="background: #F3EDE3; border-top: 1px solid rgba(42,26,28,0.10)">
+      <div style="max-width: 1240px; margin: 0 auto; padding: 96px 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 48px">
+        <div style="flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 18px">
+          <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 19px; letter-spacing: 0.12em; color: {{wine}}">RANGE OF MOTION</span>
+          <h2 style="margin: 0; font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-size: clamp(28px, 3.6vw, 42px); font-weight: 700; letter-spacing: 0.02em">你的關節，<br>該動到幾度？</h2>
+          <p style="margin: 0; color: #6E5A55; font-weight: 300; max-width: 30em">從頸椎、肩、髖到腳踝，整理健康成人的關節活動度標準，並標出哪些可以用手機鏡頭量。</p>
+          <div>
+            <button onClick="{{goRom}}" style="border: 1px solid {{wine}}; background: transparent; border-radius: 2px; padding: 0 22px; min-height: 46px; font: inherit; font-size: 14px; letter-spacing: 0.16em; cursor: pointer; color: {{wine}}">查看完整標準</button>
+          </div>
+        </div>
+        <div style="flex: 1 1 420px; min-width: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid {{wine}}">
+          <div style="padding: 22px 12px 0 0; display: flex; flex-direction: column; gap: 6px">
+            <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: clamp(40px, 5vw, 64px); font-weight: 500; line-height: 1; color: {{wine}}">170°</span>
+            <span style="font-size: 14px; color: #6E5A55">肩屈曲</span>
+          </div>
+          <div style="padding: 22px 12px 0 12px; border-left: 1px solid rgba(42,26,28,0.14); display: flex; flex-direction: column; gap: 6px">
+            <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: clamp(40px, 5vw, 64px); font-weight: 500; line-height: 1; color: {{wine}}">120°</span>
+            <span style="font-size: 14px; color: #6E5A55">髖屈曲</span>
+          </div>
+          <div style="padding: 22px 0 0 12px; border-left: 1px solid rgba(42,26,28,0.14); display: flex; flex-direction: column; gap: 6px">
+            <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: clamp(40px, 5vw, 64px); font-weight: 500; line-height: 1; color: {{wine}}">15°</span>
+            <span style="font-size: 14px; color: #6E5A55">踝背屈</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3D 關節耦合模型入口 -->
+    <section style="background: #EAE1D3; border-top: 1px solid rgba(42,26,28,0.10)">
+      <div style="max-width: 1240px; margin: 0 auto; padding: 96px 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 48px">
+        <div style="flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 18px">
+          <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 19px; letter-spacing: 0.12em; color: {{wine}}">3D JOINT MODEL</span>
+          <h2 style="margin: 0; font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-size: clamp(28px, 3.6vw, 42px); font-weight: 700; letter-spacing: 0.02em">一個關節動，<br>整條鏈都在動</h2>
+          <p style="margin: 0; color: #6E5A55; font-weight: 300; max-width: 30em">互動 3D 骨骼模型：拉動滑桿或播放動作模式（划船、臥推、肩推、引體向上、深蹲、骨盆旋轉），看相鄰關節怎麼跟著動；點任何一條肌肉，看它是主動肌（向心）還是被拉長（離心）。</p>
+          <div>
+            <a href="https://claude.ai/artifact/WkQZCcTd5ZA5wsBW99obUf" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; border: 1px solid {{wine}}; background: {{wine}}; border-radius: 2px; padding: 0 22px; min-height: 46px; font-size: 14px; letter-spacing: 0.16em; text-decoration: none; color: #F3EDE3">打開 3D 模型</a>
+          </div>
+        </div>
+        <div style="flex: 1 1 420px; min-width: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid {{wine}}">
+          <div style="padding: 22px 12px 18px 0; display: flex; flex-direction: column; gap: 6px">
+            <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: clamp(40px, 5vw, 64px); font-weight: 500; line-height: 1; color: {{wine}}">8</span>
+            <span style="font-size: 14px; color: #6E5A55">個關節模型，從頭頸到足踝</span>
+          </div>
+          <div style="padding: 22px 0 18px 12px; border-left: 1px solid rgba(42,26,28,0.14); display: flex; flex-direction: column; gap: 6px">
+            <span style="font-size: 15px; line-height: 1.6; color: #2A1A1C; font-weight: 500">橘＝主動肌（向心）<br>藍＝被拉長（離心）<br>紅＝和動作無關</span>
+            <span style="font-size: 14px; color: #6E5A55">肌肉顏色怎麼看</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 教練簡介：酒紅底 -->
+    <section style="background: {{wine}}; color: #F3EDE3">
+      <div style="max-width: 1240px; margin: 0 auto; padding: 96px 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 56px">
+        <div style="flex: 1 1 300px; max-width: 400px; padding: 12px; border: 1px solid rgba(243,237,227,0.35)">
+          <div style="aspect-ratio: 4 / 5; background: {{wineDeep}}; display: flex; align-items: center; justify-content: center; color: #E2CDB8; font-size: 14px; letter-spacing: 0.1em">[你的照片]</div>
+        </div>
+        <div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 22px">
+          <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 19px; letter-spacing: 0.12em; color: #E2CDB8">DIRECTED BY</span>
+          <h2 style="margin: 0; font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: clamp(46px, 5.6vw, 76px); font-weight: 500; line-height: 1">Isaac</h2>
+          <p style="margin: 0; font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-size: 20px; font-weight: 500; line-height: 1.7; border-left: 1px solid #F3EDE3; padding-left: 20px">「[一句你的教學理念]」</p>
+          <p style="margin: 0; color: #E2CDB8; font-weight: 300; max-width: 34em">[你的資歷、證照與專長，2–3 句。]</p>
+          <div style="display: flex; flex-wrap: wrap; gap: 10px">
+            <a href="https://www.instagram.com/chang.fit_/" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 18px; border-radius: 2px; background: #F3EDE3; color: {{wine}}; text-decoration: none; font-size: 14px; letter-spacing: 0.12em">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg>
+              Instagram
+            </a>
+            <a href="#" style="display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 18px; border-radius: 2px; background: #F3EDE3; color: {{wine}}; text-decoration: none; font-size: 14px; letter-spacing: 0.12em">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="3"></rect><path d="M10 9.5v5l4.5-2.5z"></path></svg>
+              YouTube
+            </a>
+            <a href="#" style="display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 18px; border-radius: 2px; background: #F3EDE3; color: {{wine}}; text-decoration: none; font-size: 14px; letter-spacing: 0.12em">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"></path></svg>
+              Facebook
+            </a>
+            <button onClick="{{goAbout}}" style="min-height: 44px; padding: 0 18px; border-radius: 2px; background: transparent; color: #F3EDE3; border: 1px solid rgba(243,237,227,0.45); font: inherit; font-size: 14px; letter-spacing: 0.12em; cursor: pointer">更多關於我 →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </sc-if>
+
+  <!-- ======================= 開始評估 ======================= -->
+  <sc-if value="{{isAssess}}" hint-placeholder-val="{{ false }}">
+    <section style="max-width: 980px; margin: 0 auto; padding: 56px 24px 96px; display: flex; flex-direction: column; gap: 36px">
+      <div style="display: flex; flex-direction: column; gap: 12px">
+        <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 19px; letter-spacing: 0.12em; color: {{wine}}">ASSESSMENT</span>
+        <h1 style="margin: 0; font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-size: clamp(30px, 4.4vw, 46px); font-weight: 700">身體評估</h1>
+        <p style="margin: 0; color: #6E5A55; font-weight: 300">依序完成五個章節，可隨時點選章節回去修改。</p>
+      </div>
+
+      <ol aria-label="評估步驟" style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px">
+        <sc-for list="{{steps}}" as="s" hint-placeholder-count="5">
+          <li style="display: flex">
+            <button onClick="{{s.go}}" style="flex: 1; background: none; border: 0; border-top: 2px solid {{s.border}}; padding: 12px 2px 4px; cursor: pointer; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; font: inherit; min-height: 44px; text-align: left">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.16em; color: {{s.numColor}}">0{{s.num}}</span>
+              <span style="font-size: 13px; letter-spacing: 0.04em; color: {{s.labelColor}}">{{s.label}}</span>
+            </button>
+          </li>
+        </sc-for>
+      </ol>
+
+      <div style="background: #FBF8F2; border: 1px solid rgba(42,26,28,0.12); padding: 36px; display: flex; flex-direction: column; gap: 24px">
+
+        <sc-if value="{{step1}}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; flex-direction: column; gap: 18px">
+            <h2 style="margin: 0; font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-size: 26px; font-weight: 700">安全篩檢</h2>
+            <p style="margin: 0; color: #6E5A55; font-weight: 300">以下任一題回答「是」，請先停止評估並盡快就醫。</p>
+            <sc-for list="{{redFlags}}" as="q" hint-placeholder-count="4">
+              <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; padding: 16px 0; border-top: 1px solid rgba(42,26,28,0.10)">
+                <span style="flex: 1 1 320px; font-size: 16px">{{q.text}}</span>
+                <div style="display: flex; gap: 8px">
+                  <button style="min-width: 68px; min-height: 44px; border-radius: 2px; border: 1px solid rgba(42,26,28,0.28); background: transparent; font: inherit; letter-spacing: 0.1em; cursor: pointer; color: #2A1A1C">是</button>
+                  <button style="min-width: 68px; min-height: 44px; border-radius: 2px; border: 1px solid rgba(42,26,28,0.28); background: transparent; font: inherit; letter-spacing: 0.1em; cursor: pointer; color: #2A1A1C">否</button>
+                </div>
+              </div>
+            </sc-for>
+            <p style="margin: 0; font-size: 12px; letter-spacing: 0.06em; color: #6E5A55">示意題目，正式上線前需醫師複核。</p>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{step2}}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; gap: 18px">
+            <h2 style="margin: 0; font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-size: 26px; font-weight: 700">自填問卷</h2>
+            <div role="group" aria-labelledby="q-body" style="display: flex; flex-direction: column; gap: 12px">
+              <span id="q-body" style="font-weight: 500">你有哪個部位常常有酸痛、不舒服或卡頓的狀況？（可複選）</span>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 8px">
+                <sc-for list="{{bodyParts}}" as="b" hint-placeholder-count="9">
+                  <button onClick="{{b.toggle}}" aria-pressed="{{b.pressed}}" style="min-height: 48px; border-radius: 2px; font: inherit; font-size: 15px; letter-spacing: 0.08em; cursor: pointer; background: {{b.bg}}; color: {{b.color}}; border: 1px solid {{b.border}}">{{b.label}}</button>
+                </sc-for>
+              </div>
+              <span style="font-size: 13px; color: #6E5A55">已選擇：{{bodySummary}}</span>
+            </div>
+            <span style="font-weight: 500; padding-top: 6px">現在最不舒服的地方，疼痛程度是多少？（0 = 不痛，10 = 最痛）</span>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(44px, 1fr)); gap: 6px">
+              <sc-for list="{{painScale}}" as="p" hint-placeholder-count="11">
+                <button style="min-height: 46px; border-radius: 2px; border: 1px solid rgba(42,26,28,0.22); background: transparent; font-family: 'JetBrains Mono', monospace; cursor: pointer; color: #2A1A1C">{{p.n}}</button>
+              </sc-for>
+            </div>
+            <div style="border-left: 1px solid {{wine}}; padding: 4px 0 4px 18px; color: #6E5A55; font-weight: 300">頸部（NDI）與下背（ODI）問卷題組，確認授權後放入；生活型態題：每天坐多久、連續久坐多久、每週運動幾次、改善目標。</div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{step3}}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; gap: 18px">
+            <h2 style="margin: 0; font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-size: 26px; font-weight: 700">動作測試</h2>
+            <p style="margin: 0; color: #6E5A55; font-weight: 300">每個測試先看教練示範，再拍下你自己的動作。請人幫你拍，或把手機架好再開始。</p>
+            <ul style="margin: 0; padding: 14px 18px 14px 34px; background: #EAE1D3; color: #2A1A1C; font-size: 14px; line-height: 1.9">
+              <li>手機直立，距離約 2～3 公尺，高度約到胸口或腰部</li>
+              <li>依每張卡片寫的方向拍：背面或正面，坐姿或站姿</li>
+              <li>每個動作左右各做一次，動作慢慢做；穿貼身衣物比較看得清楚</li>
+            </ul>
+            <div style="display: flex; align-items: baseline; gap: 10px">
+              <span style="font-size: 14px; color: #6E5A55">拍攝進度</span>
+              <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 28px; font-weight: 500; color: {{wine}}">{{recCount}} / {{testTotal}}</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 40px">
+            <sc-for list="{{testGroups}}" as="g" hint-placeholder-count="3">
+            <div style="display: flex; flex-direction: column; gap: 18px">
+              <h3 style="margin: 0; padding-bottom: 10px; border-bottom: 1px solid {{wine}}; display: flex; justify-content: space-between; align-items: baseline; gap: 12px">
+                <span style="font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-size: 22px; font-weight: 700">{{g.name}}</span>
+                <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 18px; font-weight: 400; color: {{wine}}">{{g.en}}</span>
+              </h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 28px 20px">
+              <sc-for list="{{g.items}}" as="t" hint-placeholder-count="2">
+                <article style="display: flex; flex-direction: column; gap: 14px">
+                  <button onClick="{{t.open}}" aria-label="播放{{t.name}}示範影片" style="position: relative; display: block; width: 100%; aspect-ratio: 2.39 / 1; padding: 0; border: 0; cursor: pointer; background: {{wineDeep}}; overflow: hidden">
+                    <img src="{{t.poster}}" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+                    <span style="position: absolute; inset: 0; background: rgba(20,6,9,0.22)"></span>
+                    <span style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 52px; height: 52px; border-radius: 50%; background: rgba(243,237,227,0.92); color: {{wine}}; display: flex; align-items: center; justify-content: center">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
+                    </span>
+                    <span style="position: absolute; left: 12px; bottom: 10px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: #F3EDE3">TEST {{t.num}}</span>
+                    <span style="position: absolute; right: 12px; bottom: 10px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #F3EDE3; background: rgba(20,6,9,0.6); padding: 2px 6px">{{t.dur}}</span>
+                  </button>
+                  <div style="display: flex; flex-direction: column; gap: 6px">
+                    <strong style="font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-size: 20px; font-weight: 700">{{t.name}}</strong>
+                    <span style="font-size: 14px; color: #6E5A55; font-weight: 300">拍攝：{{t.shot}}</span>
+                    <span style="font-size: 14px; color: #6E5A55; font-weight: 300">觀察：{{t.watch}}</span>
+                    <span style="align-self: flex-start; margin-top: 4px; font-size: 13px; letter-spacing: 0.06em; padding: 5px 12px; border: 1px solid {{wine}}; color: {{wine}}">對照標準 {{t.std}}</span>
+                  </div>
+                  <div style="border-top: 1px solid rgba(42,26,28,0.12); padding-top: 14px; display: flex; flex-direction: column; gap: 10px">
+                    <sc-if value="{{t.noRec}}" hint-placeholder-val="{{ true }}">
+                      <label style="position: relative; display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 0 20px; background: {{wine}}; color: #F3EDE3; font-size: 15px; letter-spacing: 0.12em; cursor: pointer; overflow: hidden">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg>
+                        拍攝我的動作
+                        <input type="file" accept="video/*" capture="environment" onChange="{{t.onPick}}" aria-label="拍攝或選擇{{t.name}}的影片" style="position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer">
+                      </label>
+                      <span style="font-size: 13px; color: #6E5A55">手機會直接打開相機；電腦可以選擇已經拍好的影片。手機請放穩不要推近，開頭先站（坐）正 1 秒，全身都要在畫面裡，角度才算得準。</span>
+                    </sc-if>
+                    <sc-if value="{{t.hasRec}}" hint-placeholder-val="{{ false }}">
+                      <span style="display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; color: {{wine}}">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>
+                        已拍攝完成
+                      </span>
+                      <video src="{{t.myUrl}}" controls playsInline="{{ true }}" style="display: block; width: 100%; max-height: 420px; aspect-ratio: 9 / 16; object-fit: contain; background: #000000"></video>
+                      <!-- 自動角度分析：在學員手機上跑，影片不上傳 -->
+                      <sc-if value="{{t.canAnalyze}}" hint-placeholder-val="{{ true }}">
+                        <button onClick="{{t.analyze}}" style="display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 0 20px; border: 0; background: {{wine}}; color: #F3EDE3; font: inherit; font-size: 15px; letter-spacing: 0.12em; cursor: pointer">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5" r="2"></circle><path d="M12 7v6M8 21l4-8 4 8M6 10l6-1 6 1"></path></svg>
+                          分析我的角度
+                        </button>
+                        <span style="font-size: 13px; color: #6E5A55">直接在網頁上分析，不用安裝任何 App。第一次按的時候，網頁會先載入分析資料（約 17 MB，像打開一段影片），建議連 Wi-Fi；分析時間大約是影片長度的 1～2 倍。</span>
+                      </sc-if>
+                      <sc-if value="{{t.manual}}" hint-placeholder-val="{{ false }}">
+                        <span style="font-size: 13px; color: #6E5A55">這項目前沒有自動角度分析，請把影片給教練看。</span>
+                      </sc-if>
+                      <sc-if value="{{t.busy}}" hint-placeholder-val="{{ false }}">
+                        <div role="status" style="display: flex; flex-direction: column; gap: 8px">
+                          <span style="font-size: 14px; color: {{wine}}; font-weight: 500">{{t.progText}}</span>
+                          <div style="height: 6px; background: rgba(42,26,28,0.1)">
+                            <div style="height: 6px; width: {{t.progW}}; background: {{wine}}"></div>
+                          </div>
+                        </div>
+                      </sc-if>
+                      <sc-if value="{{t.hasErr}}" hint-placeholder-val="{{ false }}">
+                        <span role="alert" style="font-size: 14px; color: #8A1C1C">分析失敗：{{t.err}}。請確認整個身體都在畫面裡，再試一次。</span>
+                      </sc-if>
+                      <sc-if value="{{t.hasRes}}" hint-placeholder-val="{{ false }}">
+                        <div style="display: flex; flex-direction: column; gap: 14px; padding: 18px; background: #FBF8F2; border: 1px solid rgba(42,26,28,0.12)">
+                          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px">
+                            <div style="display: flex; flex-direction: column; gap: 2px">
+                              <span style="font-size: 12px; letter-spacing: 0.08em; color: #6E5A55">{{t.res.labelL}}</span>
+                              <span style="font-family: 'Cormorant Garamond', serif; font-size: 34px; font-weight: 600; line-height: 1.1; color: {{wine}}">{{t.res.left}}</span>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 2px">
+                              <span style="font-size: 12px; letter-spacing: 0.08em; color: #6E5A55">{{t.res.labelR}}</span>
+                              <span style="font-family: 'Cormorant Garamond', serif; font-size: 34px; font-weight: 600; line-height: 1.1; color: {{wine}}">{{t.res.right}}</span>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 2px">
+                              <span style="font-size: 12px; letter-spacing: 0.08em; color: #6E5A55">左右差</span>
+                              <span style="font-family: 'Cormorant Garamond', serif; font-size: 34px; font-weight: 600; line-height: 1.1; color: #2A1A1C">{{t.res.diff}}</span>
+                            </div>
+                          </div>
+                          <span style="align-self: flex-start; font-size: 14px; font-weight: 500; padding: 6px 12px; background: {{t.res.chipBg}}; color: {{t.res.chipColor}}; border: 1px solid {{t.res.chipBorder}}">{{t.res.verdict}}</span>
+                          <sc-for list="{{t.res.extra}}" as="x" hint-placeholder-count="2">
+                            <span style="font-size: 13px; color: #6E5A55">{{x.k}}：{{x.v}}</span>
+                          </sc-for>
+                          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+                            <img src="{{t.res.snapL}}" alt="{{t.res.labelL}}最大時的骨架截圖" style="display: block; width: 100%; height: auto; background: #000000">
+                            <img src="{{t.res.snapR}}" alt="{{t.res.labelR}}最大時的骨架截圖" style="display: block; width: 100%; height: auto; background: #000000">
+                          </div>
+                          <span style="font-size: 12px; color: #6E5A55; line-height: 1.6">手機單鏡頭 2D 估算，適合比較左右差與前後測進步，不等於臨床量角。</span>
+                        </div>
+                      </sc-if>
+                      <label style="position: relative; display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 44px; padding: 0 18px; border: 1px solid {{wine}}; color: {{wine}}; font-size: 14px; letter-spacing: 0.12em; cursor: pointer; overflow: hidden">
+                        重新拍攝
+                        <input type="file" accept="video/*" capture="environment" onChange="{{t.onPick}}" aria-label="重新拍攝{{t.name}}" style="position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer">
+                      </label>
+                    </sc-if>
+                  </div>
+                </article>
+              </sc-for>
+            </div>
+            </div>
+            </sc-for>
+            </div>
+            <p style="margin: 0; display: flex; align-items: center; gap: 10px; font-size: 13px; color: #6E5A55">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="1"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+              影像只在你的裝置上分析，不會上傳。
+            </p>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{step4}}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; gap: 18px">
+            <h2 style="margin: 0; font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-size: 26px; font-weight: 700">評分結果</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1px; background: rgba(42,26,28,0.12); border: 1px solid rgba(42,26,28,0.12)">
+              <sc-for list="{{scoreAreas}}" as="a" hint-placeholder-count="4">
+                <div style="background: #FBF8F2; padding: 22px; display: flex; flex-direction: column; gap: 6px">
+                  <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: #6E5A55">{{a.name}}</span>
+                  <span style="font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-size: 38px; font-weight: 500; line-height: 1.1; color: {{wine}}">— <span style="font-size: 16px; color: #6E5A55">/ 5</span></span>
+                </div>
+              </sc-for>
+            </div>
+            <p style="margin: 0; color: #6E5A55; font-size: 14px; font-weight: 300">每個動作 0～5 分，滿分 5 分。0 分代表動作誘發疼痛，5 分代表標準完成；1～4 分的判定標準由教練提供。</p>
+
+            <!-- 動作測試的自動角度分析結果 -->
+            <div style="display: flex; flex-direction: column; gap: 12px">
+              <h3 style="margin: 0; font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-size: 21px; font-weight: 700">角度分析</h3>
+              <sc-if value="{{noAnalysis}}" hint-placeholder-val="{{ false }}">
+                <p style="margin: 0; color: #6E5A55; font-size: 14px; font-weight: 300">還沒有分析結果。回到「動作測試」拍好影片後，按「分析我的角度」。</p>
+              </sc-if>
+              <div style="display: flex; flex-direction: column; border-top: 1px solid rgba(42,26,28,0.12)">
+                <sc-for list="{{analysisRows}}" as="r" hint-placeholder-count="2">
+                  <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; padding: 14px 0; border-bottom: 1px solid rgba(42,26,28,0.12)">
+                    <strong style="flex: 1 1 180px; font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-size: 18px; font-weight: 700">{{r.num}} {{r.name}}</strong>
+                    <span style="flex: 0 0 auto; font-size: 15px; color: #2A1A1C">{{r.labelL}} {{r.left}}・{{r.labelR}} {{r.right}}・左右差 {{r.diff}}</span>
+                    <span style="flex: 0 0 auto; font-size: 13px; font-weight: 500; padding: 4px 10px; background: {{r.chipBg}}; color: {{r.chipColor}}; border: 1px solid {{r.chipBorder}}">{{r.verdict}}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <!-- 案例：教練本人 -->
+            <div style="margin-top: 12px; background: #F3EDE3; border: 1px solid rgba(42,26,28,0.12); padding: 28px; display: flex; flex-direction: column; gap: 22px">
+              <div style="display: flex; flex-direction: column; gap: 8px">
+                <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 19px; letter-spacing: 0.12em; color: {{wine}}">CASE STUDY</span>
+                <h3 style="margin: 0; font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-size: 24px; font-weight: 700">案例：教練 Isaac 本人的評估結果</h3>
+                <p style="margin: 0; color: #6E5A55; font-weight: 300">看看測試裡出現的狀況，怎麼對應回身體本身。一個部位的問題，常常會連帶影響其他測試。</p>
+              </div>
+              <sc-for list="{{caseFindings}}" as="f" hint-placeholder-count="3">
+                <article style="display: flex; flex-direction: column; gap: 12px; padding-top: 18px; border-top: 1px solid {{wine}}">
+                  <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 16px">
+                    <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 34px; font-weight: 500; line-height: 1; color: {{wine}}">{{f.num}}</span>
+                    <span style="font-size: 13px; letter-spacing: 0.08em; padding: 4px 10px; background: {{wine}}; color: #F3EDE3">{{f.area}}</span>
+                  </div>
+                  <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-size: 19px; font-weight: 700">
+                    <span>{{f.cause}}</span>
+                    <span aria-hidden="true" style="color: {{wine}}">→</span>
+                    <span style="color: {{wine}}">{{f.effect}}</span>
+                  </div>
+                  <p style="margin: 0; color: #2A1A1C; font-weight: 300; line-height: 1.8">{{f.detail}}</p>
+                  <div style="display: flex; flex-wrap: wrap; gap: 8px">
+                    <sc-for list="{{f.tests}}" as="x" hint-placeholder-count="1">
+                      <button onClick="{{x.open}}" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 1px solid {{wine}}; background: transparent; color: {{wine}}; font: inherit; font-size: 14px; letter-spacing: 0.06em; cursor: pointer">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
+                        看 {{x.label}}
+                      </button>
+                    </sc-for>
+                  </div>
+                </article>
+              </sc-for>
+              <p style="margin: 0; font-size: 13px; color: #6E5A55">以上是教練本人的個案示範，每個人的狀況不同，請以自己的評估結果為準。</p>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{step5}}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; gap: 18px">
+            <h2 style="margin: 0; font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-size: 26px; font-weight: 700">你的動作處方</h2>
+            <sc-for list="{{rx}}" as="r" hint-placeholder-count="3">
+              <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 20px; padding: 16px 0; border-top: 1px solid rgba(42,26,28,0.10)">
+                <div style="flex: 0 0 140px; aspect-ratio: 2.39 / 1; background: {{wineDeep}}"></div>
+                <div style="flex: 1 1 220px; display: flex; flex-direction: column; gap: 4px">
+                  <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: {{wine}}">TAKE 0{{r.n}}</span>
+                  <strong style="font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-weight: 500; font-size: 18px">[矯正動作]</strong>
+                  <span style="font-size: 13px; color: #6E5A55; font-weight: 300">[組數／次數]・示範影片連到你的 YouTube</span>
+                </div>
+              </div>
+            </sc-for>
+            <p style="margin: 0; font-size: 13px; color: #6E5A55">建議 [N] 週後再評估一次，追蹤進步。</p>
+          </div>
+        </sc-if>
+
+        <div style="display: flex; justify-content: space-between; gap: 12px; border-top: 1px solid rgba(42,26,28,0.10); padding-top: 24px">
+          <button onClick="{{prev}}" style="min-height: 46px; padding: 0 22px; border-radius: 2px; border: 1px solid rgba(42,26,28,0.28); background: transparent; font: inherit; letter-spacing: 0.14em; cursor: pointer; color: #2A1A1C">上一步</button>
+          <button onClick="{{next}}" style="min-height: 46px; padding: 0 26px; border-radius: 2px; border: 0; background: {{wine}}; color: #F3EDE3; font: inherit; font-weight: 500; letter-spacing: 0.14em; cursor: pointer">{{nextLabel}}</button>
+        </div>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- ======================= 動作庫 ======================= -->
+  <sc-if value="{{isLibrary}}" hint-placeholder-val="{{ false }}">
+    <section style="max-width: 1240px; margin: 0 auto; padding: 56px 24px 96px; display: flex; flex-direction: column; gap: 36px">
+      <div style="display: flex; flex-direction: column; gap: 12px">
+        <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 19px; letter-spacing: 0.12em; color: {{wine}}">THE LIBRARY</span>
+        <h1 style="margin: 0; font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-size: clamp(30px, 4.4vw, 46px); font-weight: 700">動作庫</h1>
+        <p style="margin: 0; color: #6E5A55; font-weight: 300">依部位找動作，每個都附教練示範影片。</p>
+      </div>
+      <div role="group" aria-label="依部位篩選" style="display: flex; gap: 4px; overflow-x: auto; border-bottom: 1px solid rgba(42,26,28,0.14)">
+        <sc-for list="{{chips}}" as="c" hint-placeholder-count="5">
+          <button onClick="{{c.go}}" style="flex: 0 0 auto; min-height: 46px; padding: 0 18px; font: inherit; font-size: 14px; letter-spacing: 0.14em; cursor: pointer; background: transparent; color: {{c.color}}; border: 0; border-bottom: 1px solid {{c.line}}">{{c.label}}</button>
+        </sc-for>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 32px 24px">
+        <sc-for list="{{libraryCards}}" as="card" hint-placeholder-count="6">
+          <article style="display: flex; flex-direction: column; gap: 16px">
+            <sc-if value="{{card.video}}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{card.open}}" aria-label="播放{{card.name}}示範影片" style="position: relative; display: block; width: 100%; aspect-ratio: 2.39 / 1; padding: 0; border: 0; cursor: pointer; background: {{wineDeep}}; overflow: hidden">
+                <img src="{{card.poster}}" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover">
+                <span style="position: absolute; inset: 0; background: rgba(20,6,9,0.22)"></span>
+                <span style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 52px; height: 52px; border-radius: 50%; background: rgba(243,237,227,0.92); color: {{wine}}; display: flex; align-items: center; justify-content: center">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
+                </span>
+                <span style="position: absolute; right: 12px; bottom: 10px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #F3EDE3; background: rgba(20,6,9,0.6); padding: 2px 6px">{{card.dur}}</span>
+              </button>
+            </sc-if>
+            <sc-if value="{{card.noVideo}}" hint-placeholder-val="{{ true }}">
+              <div style="position: relative; aspect-ratio: 2.39 / 1; background: {{wineDeep}}; display: flex; align-items: center; justify-content: center">
+                <span style="width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(243,237,227,0.6); display: flex; align-items: center; justify-content: center; color: #F3EDE3">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
+                </span>
+              </div>
+            </sc-if>
+            <div style="display: flex; flex-direction: column; gap: 6px">
+              <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 17px; letter-spacing: 0.08em; color: {{wine}}">CH. {{card.region}}</span>
+              <strong style="font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-size: 20px; font-weight: 500">{{card.name}}</strong>
+              <span style="font-size: 14px; font-weight: 300; color: #6E5A55">{{card.desc}}</span>
+            </div>
+          </article>
+        </sc-for>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- ======================= 活動度標準 ======================= -->
+  <sc-if value="{{isRom}}" hint-placeholder-val="{{ false }}">
+    <section style="max-width: 1100px; margin: 0 auto; padding: 56px 24px 96px; display: flex; flex-direction: column; gap: 36px">
+      <div style="display: flex; flex-direction: column; gap: 12px">
+        <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 19px; letter-spacing: 0.12em; color: {{wine}}">RANGE OF MOTION</span>
+        <h1 style="margin: 0; font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-size: clamp(30px, 4.4vw, 46px); font-weight: 700">關節活動度標準</h1>
+        <p style="margin: 0; color: #6E5A55; font-weight: 300; max-width: 36em">健康成人各關節大約能動到幾度。評估後拿你的數值來對照，就知道哪裡卡住。共 {{romCount}} 項。</p>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 10px 20px; font-size: 13px; color: #6E5A55">
+        <span style="display: inline-flex; align-items: center; gap: 8px"><span style="padding: 4px 10px; border-radius: 2px; background: {{wine}}; color: #F3EDE3; border: 1px solid {{wine}}">鏡頭可量</span>手機鏡頭可以自動量</span>
+        <span style="display: inline-flex; align-items: center; gap: 8px"><span style="padding: 4px 10px; border-radius: 2px; color: {{wine}}; border: 1px solid {{wine}}">鏡頭粗估</span>只能粗估，看趨勢用</span>
+        <span style="display: inline-flex; align-items: center; gap: 8px"><span style="padding: 4px 10px; border-radius: 2px; color: #6E5A55; border: 1px solid rgba(42,26,28,0.28)">教練目測／自評</span>鏡頭量不準</span>
+      </div>
+
+      <div role="group" aria-label="依部位篩選" style="display: flex; gap: 4px; overflow-x: auto; border-bottom: 1px solid rgba(42,26,28,0.14)">
+        <sc-for list="{{romChips}}" as="c" hint-placeholder-count="9">
+          <button onClick="{{c.go}}" style="flex: 0 0 auto; min-height: 46px; padding: 0 16px; font: inherit; font-size: 14px; letter-spacing: 0.1em; cursor: pointer; background: transparent; color: {{c.color}}; border: 0; border-bottom: 1px solid {{c.line}}">{{c.label}}</button>
+        </sc-for>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 48px">
+        <sc-for list="{{romGroups}}" as="g" hint-placeholder-count="3">
+          <div style="display: flex; flex-direction: column">
+            <h2 style="margin: 0; padding-bottom: 12px; border-bottom: 1px solid {{wine}}; display: flex; justify-content: space-between; align-items: baseline; gap: 12px">
+              <span style="font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-size: 26px; font-weight: 700">{{g.name}}</span>
+              <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 19px; font-weight: 400; color: {{wine}}">{{g.en}}</span>
+            </h2>
+            <sc-for list="{{g.items}}" as="m" hint-placeholder-count="4">
+              <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px 24px; padding: 18px 0; border-bottom: 1px solid rgba(42,26,28,0.10)">
+                <span style="flex: 0 0 120px; font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 40px; font-weight: 500; line-height: 1; color: {{wine}}">{{m.value}}</span>
+                <div style="flex: 1 1 260px; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+                  <strong style="font-size: 17px; font-weight: 500; letter-spacing: 0.04em">{{m.motion}}</strong>
+                  <span style="font-size: 14px; color: #6E5A55; font-weight: 300">{{m.note}}</span>
+                </div>
+                <span style="flex: 0 0 auto; font-size: 13px; letter-spacing: 0.06em; padding: 5px 12px; border-radius: 2px; background: {{m.badgeBg}}; color: {{m.badgeColor}}; border: 1px solid {{m.badgeBorder}}">{{m.badge}}</span>
+              </div>
+            </sc-for>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="border-left: 1px solid {{wine}}; padding: 4px 0 4px 18px; font-size: 13px; color: #6E5A55; font-weight: 300; line-height: 1.8">
+        標準值參考 AAOS（美國骨科醫學會）、CDC 正常關節活動度研究、Physiopedia、Physiotutors、QUT 足踝解剖等資料，由教練審定。每個人的活動度會因年齡、性別與體型不同；本表用於對照與追蹤，不能取代醫療診斷。
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- ======================= 我的紀錄 ======================= -->
+  <sc-if value="{{isRecord}}" hint-placeholder-val="{{ false }}">
+    <section style="max-width: 980px; margin: 0 auto; padding: 56px 24px 96px; display: flex; flex-direction: column; gap: 32px">
+      <div style="display: flex; flex-direction: column; gap: 12px">
+        <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 19px; letter-spacing: 0.12em; color: {{wine}}">YOUR RECORD</span>
+        <h1 style="margin: 0; font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-size: clamp(30px, 4.4vw, 46px); font-weight: 700">我的紀錄</h1>
+        <p style="margin: 0; color: #6E5A55; font-weight: 300">每次評估的分數會存在你自己的裝置上，用來看進步趨勢。</p>
+      </div>
+      <div style="border: 1px solid rgba(42,26,28,0.12); background: #FBF8F2; padding: 8px 24px 24px; overflow-x: auto">
+        <table style="width: 100%; min-width: 520px; border-collapse: collapse; font-size: 15px">
+          <thead>
+            <tr style="text-align: left">
+              <th style="padding: 16px 8px; border-bottom: 1px solid {{wine}}; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.2em; font-weight: 400; color: {{wine}}">日期</th>
+              <th style="padding: 16px 8px; border-bottom: 1px solid {{wine}}; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.2em; font-weight: 400; color: {{wine}}">肩頸</th>
+              <th style="padding: 16px 8px; border-bottom: 1px solid {{wine}}; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.2em; font-weight: 400; color: {{wine}}">胸椎</th>
+              <th style="padding: 16px 8px; border-bottom: 1px solid {{wine}}; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.2em; font-weight: 400; color: {{wine}}">腰背</th>
+              <th style="padding: 16px 8px; border-bottom: 1px solid {{wine}}; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.2em; font-weight: 400; color: {{wine}}">髖</th>
+              <th style="padding: 16px 8px; border-bottom: 1px solid {{wine}}; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.2em; font-weight: 400; color: {{wine}}">疼痛</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="6" style="padding: 40px 8px; text-align: center; color: #6E5A55; font-weight: 300">還沒有紀錄。完成第一次評估後會出現在這裡。</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="display: flex">
+        <button onClick="{{goAssess}}" style="border: 0; border-radius: 2px; padding: 0 28px; min-height: 50px; font: inherit; font-weight: 500; letter-spacing: 0.14em; cursor: pointer; background: {{wine}}; color: #F3EDE3">開始第一次評估</button>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- ======================= 關於我 ======================= -->
+  <sc-if value="{{isAbout}}" hint-placeholder-val="{{ false }}">
+    <section style="max-width: 1100px; margin: 0 auto; padding: 56px 24px 96px; display: flex; flex-direction: column; gap: 56px">
+      <div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 48px">
+        <div style="flex: 1 1 280px; max-width: 380px; padding: 12px; border: 1px solid {{wine}}">
+          <div style="aspect-ratio: 4 / 5; background: #EAE1D3; display: flex; align-items: center; justify-content: center; color: #6E5A55; font-size: 14px; letter-spacing: 0.1em">[你的照片]</div>
+        </div>
+        <div style="flex: 1 1 360px; display: flex; flex-direction: column; gap: 18px">
+          <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 19px; letter-spacing: 0.12em; color: {{wine}}">ABOUT</span>
+          <h1 style="margin: 0; font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: clamp(52px, 6.4vw, 88px); font-weight: 500; line-height: 1; color: {{wine}}">Isaac</h1>
+          <p style="margin: 0; font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-size: 20px; font-weight: 500">[一句話介紹你是誰、幫助什麼樣的人]</p>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0 40px">
+        <div style="border-top: 1px solid {{wine}}; padding-top: 22px; display: flex; flex-direction: column; gap: 10px">
+          <strong style="font-size: 17px; font-weight: 500; letter-spacing: 0.08em">資歷與證照</strong>
+          <span style="color: #6E5A55; font-weight: 300">[證照名稱]<br>[教學年資]<br>[服務過的對象]</span>
+        </div>
+        <div style="border-top: 1px solid {{wine}}; padding-top: 22px; display: flex; flex-direction: column; gap: 10px">
+          <strong style="font-size: 17px; font-weight: 500; letter-spacing: 0.08em">我的理念</strong>
+          <span style="color: #6E5A55; font-weight: 300">[為什麼做這個評估系統，2–3 句]</span>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 18px">
+        <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 19px; letter-spacing: 0.12em; color: #6E5A55">FOLLOW</span>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px">
+          <a href="https://www.instagram.com/chang.fit_/" target="_blank" rel="noopener" style="display: flex; align-items: center; gap: 16px; padding: 24px; background: {{wine}}; text-decoration: none; color: #F3EDE3">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg>
+            <span style="display: flex; flex-direction: column"><strong style="font-weight: 500; letter-spacing: 0.08em">Instagram</strong><span style="font-size: 13px; color: #E2CDB8">@chang.fit_</span></span>
+          </a>
+          <a href="#" style="display: flex; align-items: center; gap: 16px; padding: 24px; background: {{wine}}; text-decoration: none; color: #F3EDE3">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="3"></rect><path d="M10 9.5v5l4.5-2.5z"></path></svg>
+            <span style="display: flex; flex-direction: column"><strong style="font-weight: 500; letter-spacing: 0.08em">YouTube</strong><span style="font-size: 13px; color: #E2CDB8">[你的頻道名稱]</span></span>
+          </a>
+          <a href="#" style="display: flex; align-items: center; gap: 16px; padding: 24px; background: {{wine}}; text-decoration: none; color: #F3EDE3">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"></path></svg>
+            <span style="display: flex; flex-direction: column"><strong style="font-weight: 500; letter-spacing: 0.08em">Facebook</strong><span style="font-size: 13px; color: #E2CDB8">[你的粉專名稱]</span></span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- ===== 開始評估浮動快捷鍵（評估頁以外都顯示） ===== -->
+  <sc-if value="{{showFab}}" hint-placeholder-val="{{ true }}">
+    <button onClick="{{goAssessStart}}" style="position: fixed; right: 20px; bottom: 20px; z-index: 40; display: flex; align-items: center; gap: 10px; min-height: 54px; padding: 0 24px; border: 0; border-radius: 999px; background: {{wine}}; color: #F3EDE3; font: inherit; font-size: 15px; font-weight: 500; letter-spacing: 0.14em; cursor: pointer; box-shadow: 0 10px 28px rgba(42,26,28,0.35)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h6v3H9z"></path><path d="M7 5H5v15h14V5h-2"></path><path d="M9 13l2 2 4-4"></path></svg>
+      開始評估
+    </button>
+  </sc-if>
+
+  <!-- ===== 示範影片播放視窗 ===== -->
+  <sc-if value="{{videoOpen}}" hint-placeholder-val="{{ false }}">
+    <div role="dialog" aria-modal="true" aria-label="{{modalName}} 示範影片" style="position: fixed; inset: 0; z-index: 50; background: rgba(20,6,9,0.88); display: flex; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box">
+      <div style="display: flex; flex-direction: column; gap: 12px; max-width: 100%">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px; color: #F3EDE3">
+          <span style="display: flex; flex-direction: column">
+            <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 16px; letter-spacing: 0.08em; color: #E2CDB8">CH. {{modalRegion}}</span>
+            <strong style="font-family: 'LXGW WenKai TC', 'Noto Serif TC', serif; font-size: 20px; font-weight: 700">{{modalName}}</strong>
+          </span>
+          <button onClick="{{closeVideo}}" aria-label="關閉影片" style="width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(243,237,227,0.5); background: transparent; color: #F3EDE3; cursor: pointer; display: flex; align-items: center; justify-content: center">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6 L18 18 M18 6 L6 18"></path></svg>
+          </button>
+        </div>
+        <video src="{{modalSrc}}" controls playsInline="{{ true }}" autoPlay="{{ true }}" style="display: block; height: min(78vh, 760px); max-width: 100%; aspect-ratio: 9 / 16; background: #000000"></video>
+      </div>
+    </div>
+  </sc-if>
+  </main>
+
+  <!-- ===== 頁尾：片尾字幕 ===== -->
+  <footer style="background: {{wineNight}}; color: #F3EDE3">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 48px 24px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 28px; font-size: 13px; color: #D9C2B0">
+      <div style="flex: 1 1 380px; display: flex; flex-direction: column; gap: 10px">
+        <span style="font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 21px; letter-spacing: 0.2em; color: #F3EDE3">CHANG.FIT</span>
+        <span style="font-weight: 300; line-height: 1.8">本網站提供動作評估與訓練建議，不能取代醫療診斷。若有疼痛加劇或不適，請停止並就醫。</span>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 22px; align-items: flex-start; letter-spacing: 0.14em">
+        <a href="https://www.instagram.com/chang.fit_/" target="_blank" rel="noopener" style="color: #F3EDE3; text-decoration: none">Instagram</a>
+        <a href="#" style="color: #F3EDE3; text-decoration: none">YouTube</a>
+        <a href="#" style="color: #F3EDE3; text-decoration: none">Facebook</a>
+        <a href="#" style="color: #F3EDE3; text-decoration: none">隱私說明</a>
+      </div>
+    </div>
+  </footer>
+</div>
+</template>
+<script>
+
+class Component extends DCLogic {
+  renderVals() {
+    var wine = this.props.wine ?? '#6B1E2A';
+    var shade = function (hex, f) {
+      var h = String(hex).replace('#', '');
+      if (h.length !== 6) { return hex; }
+      var out = '#';
+      for (var i = 0; i < 3; i++) {
+        var v = Math.round(parseInt(h.substr(i * 2, 2), 16) * f);
+        out += ('0' + Math.max(0, Math.min(255, v)).toString(16)).slice(-2);
+      }
+      return out;
+    };
+    var wineDeep = shade(wine, 0.55);
+    var wineNight = shade(wine, 0.32);
+    var st = Object.assign({ screen: 'home', step: 0, region: 'all', romRegion: 'all' }, this.state || {});
+    var self = this;
+    var go = function (screen) {
+      return function () {
+        self.setState({ screen: screen });
+        try { window.scrollTo(0, 0); } catch (e) {}
+      };
+    };
+    var navDefs = [['home', '首頁'], ['assess', '身體評估'], ['library', '動作庫'], ['rom', '活動度標準'], ['record', '我的紀錄'], ['about', '關於我']];
+
+    // ===== 關節活動度標準資料表（教練審定版 v1，2026-11-14）=====
+    // camera: yes = 手機鏡頭可量；rough = 鏡頭粗估；no = 教練目測或自評
+    var ROM_DB = [
+      { region: 'neck', motion: '頸椎屈曲', value: '45°', camera: 'yes', note: '坐姿，低頭讓下巴靠近胸口' },
+      { region: 'neck', motion: '頸椎伸展', value: '45°', camera: 'yes', note: '坐姿，抬頭往上看' },
+      { region: 'neck', motion: '頸椎側彎（單側）', value: '45°', camera: 'yes', note: '耳朵往肩膀靠，肩膀不聳起' },
+      { region: 'neck', motion: '頸椎旋轉（單側）', value: '80°', camera: 'no', note: '頭往左右轉，肩膀不跟著轉' },
+      { region: 'thoracic', motion: '胸椎屈曲', value: '20°', camera: 'rough', note: '坐姿固定骨盆，上背往前捲' },
+      { region: 'thoracic', motion: '胸椎伸展', value: '20°', camera: 'rough', note: '坐姿固定骨盆，上背往後伸' },
+      { region: 'thoracic', motion: '胸椎側彎（單側）', value: '20°', camera: 'rough', note: '坐姿固定骨盆，軀幹往側邊彎' },
+      { region: 'thoracic', motion: '胸椎旋轉（單側）', value: '35°', camera: 'no', note: '坐姿固定骨盆，上半身往左右轉' },
+      { region: 'lumbar', motion: '腰椎屈曲', value: '60°', camera: 'rough', note: '站姿，往前彎腰' },
+      { region: 'lumbar', motion: '腰椎伸展', value: '25°', camera: 'rough', note: '站姿，往後仰' },
+      { region: 'lumbar', motion: '腰椎側彎（單側）', value: '25°', camera: 'rough', note: '站姿，手沿大腿外側往下滑' },
+      { region: 'lumbar', motion: '腰椎旋轉（單側）', value: '5°', camera: 'no', note: '腰椎本身轉動角度很小' },
+      { region: 'shoulder', motion: '肩屈曲', value: '170°', camera: 'yes', note: '手臂往前、往上舉到最高' },
+      { region: 'shoulder', motion: '肩伸展', value: '45°', camera: 'yes', note: '手臂往身體後方帶' },
+      { region: 'shoulder', motion: '肩外展', value: '180°', camera: 'yes', note: '手臂從側邊舉過頭' },
+      { region: 'shoulder', motion: '肩內轉', value: '70°', camera: 'no', note: '手臂側平舉、手肘彎 90°，前臂往下轉' },
+      { region: 'shoulder', motion: '肩外轉', value: '110°', camera: 'no', note: '手臂側平舉、手肘彎 90°，前臂往上轉；內外轉合計 180°' },
+      { region: 'shoulder', motion: '肩水平內收', value: '110°', camera: 'rough', note: '從側平舉 90° 往胸前帶' },
+      { region: 'shoulder', motion: '肩水平後收', value: '15°', camera: 'rough', note: '從側平舉 90° 往身體後方帶' },
+      { region: 'shoulder', motion: '肩肱節律', value: '2:1', camera: 'no', note: '抬手 30° 之後，盂肱關節與肩胛的動作比例' },
+      { region: 'shoulder', motion: '肩胛上旋', value: '50–60°', camera: 'no', note: '手臂舉到最高時，肩胛往上轉的角度' },
+      { region: 'elbow', motion: '肘屈曲', value: '140°', camera: 'yes', note: '手肘彎到最緊' },
+      { region: 'elbow', motion: '肘伸展', value: '0°', camera: 'yes', note: '手肘完全打直' },
+      { region: 'hip', motion: '髖屈曲', value: '120°', camera: 'yes', note: '仰躺，膝蓋往胸口抱' },
+      { region: 'hip', motion: '髖伸展', value: '15°', camera: 'yes', note: '趴姿，大腿往上抬' },
+      { region: 'hip', motion: '髖內轉', value: '40°', camera: 'no', note: '坐姿，髖膝屈 90°，小腿往外擺' },
+      { region: 'hip', motion: '髖外轉', value: '45°', camera: 'no', note: '坐姿，髖膝屈 90°，小腿往內擺' },
+      { region: 'knee', motion: '膝外轉', value: '30°', camera: 'no', note: '仰躺，髖膝屈 90°，小腿往外轉' },
+      { region: 'foot', motion: '踝背屈', value: '15°', camera: 'yes', note: '膝蓋打直，腳尖往上勾' },
+      { region: 'foot', motion: '踝蹠屈', value: '50°', camera: 'yes', note: '腳尖往下踩' },
+      { region: 'foot', motion: '大腳趾上翹', value: '60°', camera: 'no', note: '第一蹠趾關節往上翹；正常走路至少需要 35–40°' },
+      { region: 'foot', motion: '大腳趾下屈', value: '45°', camera: 'no', note: '第一蹠趾關節往下彎' },
+      { region: 'foot', motion: '足弓下沉（舟骨下降）', value: '5–9 mm', camera: 'no', note: '站立放鬆與中立位的舟骨高度差；>9 mm 偏扁平，<5 mm 偏高弓' }
+    ];
+    var ROM_REGIONS = [
+      ['neck', '頸椎', 'Cervical'], ['thoracic', '胸椎', 'Thoracic'], ['lumbar', '腰椎', 'Lumbar'],
+      ['shoulder', '肩・肩胛', 'Shoulder'], ['elbow', '肘', 'Elbow'], ['hip', '髖', 'Hip'],
+      ['knee', '膝', 'Knee'], ['foot', '踝・足', 'Ankle and Foot']
+    ];
+    var nav = navDefs.map(function (d) {
+      var on = st.screen === d[0];
+      return { label: d[1], go: go(d[0]), color: on ? wine : '#6E5A55', line: on ? wine : 'transparent' };
+    });
+    var stepLabels = ['安全篩檢', '自填問卷', '動作測試', '評分結果', '動作處方'];
+    var steps = stepLabels.map(function (label, i) {
+      var done = i <= st.step;
+      return {
+        label: label, num: String(i + 1),
+        border: done ? wine : 'rgba(42,26,28,0.16)',
+        numColor: done ? wine : '#6E5A55',
+        labelColor: i === st.step ? '#2A1A1C' : '#6E5A55',
+        go: function () { self.setState({ step: i }); }
+      };
+    });
+    var regionDefs = [['all', '全部'], ['neck', '肩頸'], ['thoracic', '胸椎'], ['low', '腰背'], ['hip', '髖']];
+    var chips = regionDefs.map(function (d) {
+      var on = st.region === d[0];
+      return { label: d[1], go: function () { self.setState({ region: d[0] }); },
+        color: on ? wine : '#6E5A55', line: on ? wine : 'transparent' };
+    });
+    // ===== 動作庫資料 =====
+    // 動作庫影片資料：新增動作只要在這裡加一筆（region 對應上方部位篩選）
+    var VIDEO_LIST = [
+      { id: 'side', name: '側棒式（肩關節）', region: '肩頸', key: 'neck', dur: '0:35',
+        poster: 'assets/2a57c7ff492853899e37f7c2f21f2332.jpg', src: 'assets/b1431e334a588ae0cce59e92e8947229.mp4' },
+      { id: 'plank', name: '棒式', region: '腰背', key: 'low', dur: '0:38',
+        poster: 'assets/ff778f7e97e3b6d751155d96dd207e20.jpg', src: 'assets/fed6dcf25d1c72f04779605a5ab53906.mp4' },
+      { id: 'deadbug', name: '死蟲', region: '腰背', key: 'low', dur: '0:53',
+        poster: 'assets/493ed9d7615f4ec812bab8d64ee82518.jpg', src: 'assets/dabd743166292ae9466a6d29d39c7442.mp4' },
+      { id: 'thoracic', name: '側躺胸椎活動度', region: '胸椎', key: 'thoracic', dur: '0:21',
+        poster: 'assets/a107e9e68a1c1829bdde9a1b3d2831cf.jpg', src: 'assets/a27f07307ea5f3f14c7498a184031964.mp4' },
+      { id: 'bridge2', name: '雙腳橋式', region: '髖', key: 'hip', dur: '0:31',
+        poster: 'assets/d0e0ab8d4b764509f35330458ccd19e5.jpg', src: 'assets/9bc806d8c09fc24abcf4ce7c0c074895.mp4' },
+      { id: 'bridge1', name: '單腳橋式', region: '髖', key: 'hip', dur: '0:20',
+        poster: 'assets/0f5a24bbc3ff1ca5d11aa10a02a9358e.jpg', src: 'assets/de7bee1f6059bd9defc9fb935f781a29.mp4' },
+      { id: 'hiprot', name: '側躺髖內外轉', region: '髖', key: 'hip', dur: '0:30',
+        poster: 'assets/f7b0fae4be0d4ce65be0bbdfd650e81a.jpg', src: 'assets/b4e9f18846ecbbe7cbb821d2a87190b3.mp4' },
+      { id: 'quadhip', name: '四足跪髖內外轉', region: '髖', key: 'hip', dur: '0:33',
+        poster: 'assets/b0abbc647f6cecfb565db65a206d76c8.jpg', src: 'assets/13195a31767e1e5c2ce8e6e75852638c.mp4' }
+    ];
+    // 身體評估「動作測試」的測試影片
+    var TEST_LIST = [
+      { id: 'test-pelvis-shift', num: '01', cat: 'pelvis', name: '骨盆左右橫移測試', region: '骨盆・髖', dur: '0:12',
+        shot: '正面・站姿，拍到腰部到腳', watch: '固定脊椎，骨盆水平左右移動到最遠處；肩膀保持水平、腳不移動，左右幅度是否對稱',
+        std: '左右幅度對稱（分級標準待訂）',
+        poster: 'assets/be7164c815c6188e4aaf53c781451865.jpg', src: 'assets/9b54bfeb0ef73887df72e109282c04d3.mp4' },
+      { id: 'test-pelvis-rot', num: '02', cat: 'pelvis', name: '骨盆旋轉測試', region: '骨盆・髖', dur: '0:12',
+        shot: '正面・站姿，拍到腰部到腳', watch: '腳掌踩紮實、固定脊椎，骨盆左右旋轉的幅度是否對稱、膝蓋有沒有往內倒',
+        std: '髖內轉 40°／髖外轉 45°（左右對稱）',
+        poster: 'assets/5801d194a397f62d4bdb0e8291a45d52.jpg', src: 'assets/b67c19d6541ea6c37eb30f67e3a8492e.mp4' },
+      { id: 'test-pelvis-tilt', num: '06', cat: 'pelvis', name: '骨盆前後傾測試', region: '骨盆・髖', dur: '0:20', auto: false,
+        shot: '側面・站姿，拍到腰部到大腿', watch: '後傾時褲頭前後盡量變成水平，前傾時前面的褲頭往下掉；過程中腹部、腿後、大腿前側、腰部輪流出力',
+        std: '前後傾都做得出來（分級標準待訂）',
+        poster: 'assets/ab9ac2ba3e7b1e04ce4ef46236f38a3a.jpg', src: 'assets/435e627954dde4f17b306b3147c89015.mp4' },
+      { id: 'test-abd', num: '03', cat: 'shoulder', name: '雙側肩關節外展測試', region: '肩・肩胛', dur: '0:12',
+        shot: '背面・坐姿，拍到頭頂與雙手', watch: '雙手舉到耳朵旁、兩側是否同高，有沒有聳肩或腰往後仰',
+        std: '肩外展 180°（雙側）',
+        poster: 'assets/529fc0ce56ce632a43ec30d634ca264b.jpg', src: 'assets/94064497fc1a9cedd753f9ed59a10fd3.mp4' },
+      { id: 'test-trot', num: '04', cat: 'spine', name: '胸椎旋轉測試', region: '胸椎', dur: '0:21',
+        shot: '背面・坐姿，雙腳夾瑜伽磚', watch: '吐氣做胸口旋轉、轉到最遠處，左右是否對稱、骨盆有沒有跟著轉',
+        std: '胸椎旋轉 單側 35°',
+        poster: 'assets/5a6b91a80201f54ff75e490b9719ce7a.jpg', src: 'assets/fe809c889bb3162de6319a0db475955e.mp4' },
+      { id: 'test-sidebend', num: '05', cat: 'spine', name: '軀幹側彎測試', region: '胸椎・腰椎', dur: '0:22',
+        shot: '背面・坐姿，雙腳夾瑜伽磚', watch: '吐氣側彎到最遠處，左右幅度是否對稱、兩邊屁股有沒有維持坐在椅子上',
+        std: '胸椎側彎 20°＋腰椎側彎 25°（單側）',
+        poster: 'assets/4a197b8c573fa702dad9588c4a01e082.jpg', src: 'assets/bce6cdce75550d21118f0d469d8c6642.mp4' }
+    ];
+    var TEST_CATS = [['pelvis', '骨盆', 'Pelvis'], ['shoulder', '肩關節', 'Shoulder'], ['spine', '脊椎', 'Spine']];
+    var VIDEOS = {};
+    VIDEO_LIST.concat(TEST_LIST).forEach(function (v) { VIDEOS[v.id] = v; });
+    // 學員自己拍的影片：只用瀏覽器暫存網址，留在自己的裝置上，不上傳
+    var rec = st.rec || {};
+    // ===== 自動角度分析（程式庫 isaac-pose.js，在學員手機上用 TF.js + MoveNet 計算，影片不上傳）=====
+    // 算法、正負號與判讀門檻寫在 isaac-pose.js 的 RULES；模型檔是上傳到本網站的 JSON
+    var POSE_MODEL = {
+      modelUrl: 'assets/506283a32a79eaa4fd4cfdaf4bc6dba3.json',
+      weightUrls: ['assets/baf7311c47971c9307a977962c36dc75.json', 'assets/d832988eff9ec6f71200995ef087e7d8.json']
+    };
+    var ana = st.ana || {};
+    var setAna = function (id, patch) {
+      var cur = Object.assign({}, (self.state && self.state.ana) || {});
+      cur[id] = Object.assign({}, cur[id] || {}, patch);
+      self.setState({ ana: cur });
+    };
+    var chipFor = function (level) {
+      if (level === 'ok') { return { chipBg: 'transparent', chipColor: wine, chipBorder: wine }; }
+      if (level === 'mild') { return { chipBg: '#F6E7C8', chipColor: '#5C3F00', chipBorder: '#F6E7C8' }; }
+      return { chipBg: wine, chipColor: '#F3EDE3', chipBorder: wine };
+    };
+    var viewRes = function (r) {
+      if (!r) { return null; }
+      return Object.assign({ labelL: r.labels[0], labelR: r.labels[1], left: r.left + '°', right: r.right + '°', diff: r.diff + '°',
+        verdict: r.verdict, snapL: r.snapL, snapR: r.snapR,
+        extra: (r.extra || []).map(function (x) { return { k: x[0], v: x[1] }; }) }, chipFor(r.level));
+    };
+    var testCards = TEST_LIST.map(function (v) {
+      var myUrl = rec[v.id] || '';
+      var a = ana[v.id] || {};
+      return { name: v.name, num: v.num, cat: v.cat, dur: v.dur, shot: v.shot, watch: v.watch, std: v.std, poster: v.poster,
+        myUrl: myUrl, hasRec: !!myUrl, noRec: !myUrl,
+        canAnalyze: !!myUrl && v.auto !== false && !a.busy && !a.res, manual: !!myUrl && v.auto === false, busy: !!a.busy, hasErr: !!a.err && !a.busy, err: a.err || '',
+        hasRes: !!a.res && !a.busy, res: viewRes(a.res) || {}, progText: a.msg || '準備中…', progW: Math.round((a.p || 0) * 100) + '%',
+        analyze: function () {
+          if (!window.IsaacPose || !window.tf) { setAna(v.id, { err: '分析程式還沒載入完成，請稍候再按一次' }); return; }
+          setAna(v.id, { busy: true, p: 0, msg: '準備中…', err: '', res: null });
+          window.IsaacPose.analyze(myUrl, v.id, {
+            modelUrl: POSE_MODEL.modelUrl, weightUrls: POSE_MODEL.weightUrls,
+            onProgress: function (p, msg) { setAna(v.id, { p: p, msg: msg }); }
+          }).then(function (r) {
+            var keep = { labels: r.labels, left: r.left, right: r.right, diff: r.diff, level: r.level, verdict: r.verdict,
+              extra: r.extra, snapL: r.snapL, snapR: r.snapR };
+            setAna(v.id, { busy: false, res: keep });
+          }).catch(function (e) {
+            setAna(v.id, { busy: false, err: (e && e.message) || '未知錯誤' });
+          });
+        },
+        open: function () { self.setState({ videoOpen: v.id }); },
+        onPick: function (e) {
+          var f = e && e.target && e.target.files && e.target.files[0];
+          if (!f) { return; }
+          var cur = Object.assign({}, (self.state && self.state.rec) || {});
+          if (cur[v.id]) { try { URL.revokeObjectURL(cur[v.id]); } catch (x) {} }
+          cur[v.id] = URL.createObjectURL(f);
+          var curAna = Object.assign({}, (self.state && self.state.ana) || {});
+          delete curAna[v.id];   // 換了新影片，舊的分析結果作廢
+          self.setState({ rec: cur, ana: curAna });
+        } };
+    });
+    var analysisRows = TEST_LIST.filter(function (v) { return ana[v.id] && ana[v.id].res; }).map(function (v) {
+      return Object.assign({ num: v.num, name: v.name }, viewRes(ana[v.id].res));
+    });
+    var recCount = testCards.filter(function (t) { return t.hasRec; }).length;
+    // 問卷：常有酸痛、不舒服或卡頓的部位（複選）
+    var BODY_PARTS = ['頸部', '肩部', '手肘', '手腕', '腰部', '髖關節', '膝部', '腳踝', '腳底'];
+    var picked = st.bodyParts || {};
+    var bodyParts = BODY_PARTS.map(function (p) {
+      var on = !!picked[p];
+      return { label: p, pressed: on ? 'true' : 'false',
+        bg: on ? wine : 'transparent', color: on ? '#F3EDE3' : '#2A1A1C', border: on ? wine : 'rgba(42,26,28,0.22)',
+        toggle: function () {
+          var cur = Object.assign({}, (self.state && self.state.bodyParts) || {});
+          if (cur[p]) { delete cur[p]; } else { cur[p] = true; }
+          self.setState({ bodyParts: cur });
+        } };
+    });
+    var pickedList = BODY_PARTS.filter(function (p) { return picked[p]; });
+    // 案例：教練本人
+    var testById = {};
+    TEST_LIST.forEach(function (t) { testById[t.id] = t; });
+    var CASE_FINDINGS = [
+      { num: '01', area: '肩關節・左側', cause: '左側肩胛骨常處於前傾', effect: '雙肩外展時肩胛骨不穩定',
+        detail: '教練的左側肩胛骨平常就偏向前傾。做雙側肩關節外展、手往上舉到耳朵旁邊時，左側肩胛骨會出現不穩定的現象。',
+        tests: ['test-abd'] },
+      { num: '02', area: '骨盆・右側', cause: '右側髖關節轉移重心的能力不佳', effect: '骨盆旋轉與左右橫移出現問題',
+        detail: '右側髖關節把重心轉移過去的能力不好，所以在骨盆旋轉和骨盆左右橫移這兩個測試，都會出現動作上的問題。',
+        tests: ['test-pelvis-rot', 'test-pelvis-shift'] },
+      { num: '03', area: '脊椎・連帶影響', cause: '側彎受到骨盆連帶影響', effect: '右側彎比左側彎好',
+        detail: '軀幹側彎會受到骨盆的連帶影響。延續第 02 點骨盆的狀況，教練往右側彎的表現比往左側彎好。',
+        tests: ['test-sidebend'] }
+    ];
+    var caseFindings = CASE_FINDINGS.map(function (f) {
+      return { num: f.num, area: f.area, cause: f.cause, effect: f.effect, detail: f.detail,
+        tests: f.tests.map(function (id) {
+          return { label: testById[id].num + ' ' + testById[id].name, open: function () { self.setState({ videoOpen: id }); } };
+        }) };
+    });
+    var testGroups = TEST_CATS.map(function (c) {
+      return { name: c[1], en: c[2], items: testCards.filter(function (t) { return t.cat === c[0]; }) };
+    });
+    var videoCard = function (v) {
+      return { region: v.region, key: v.key, name: v.name, desc: '教練示範影片・附字幕', dur: v.dur, poster: v.poster,
+        video: true, noVideo: false, open: function () { self.setState({ videoOpen: v.id }); } };
+    };
+    var allCards = VIDEO_LIST.map(videoCard);
+    var previewCards = ['side', 'deadbug', 'thoracic'].map(function (id) { return videoCard(VIDEOS[id]); });
+    var openId = VIDEOS[st.videoOpen] ? st.videoOpen : null;
+    var libraryCards = allCards.filter(function (c) { return st.region === 'all' || c.key === st.region; });
+    var badgeFor = function (cam) {
+      if (cam === 'yes') { return { badge: '鏡頭可量', badgeBg: wine, badgeColor: '#F3EDE3', badgeBorder: wine }; }
+      if (cam === 'rough') { return { badge: '鏡頭粗估', badgeBg: 'transparent', badgeColor: wine, badgeBorder: wine }; }
+      return { badge: '教練目測／自評', badgeBg: 'transparent', badgeColor: '#6E5A55', badgeBorder: 'rgba(42,26,28,0.28)' };
+    };
+    var romChips = [['all', '全部']].concat(ROM_REGIONS.map(function (r) { return [r[0], r[1]]; })).map(function (d) {
+      var on = st.romRegion === d[0];
+      return { label: d[1], go: function () { self.setState({ romRegion: d[0] }); },
+        color: on ? wine : '#6E5A55', line: on ? wine : 'transparent' };
+    });
+    var romGroups = ROM_REGIONS.filter(function (r) { return st.romRegion === 'all' || st.romRegion === r[0]; }).map(function (r) {
+      return {
+        name: r[1], en: r[2],
+        items: ROM_DB.filter(function (m) { return m.region === r[0]; }).map(function (m) {
+          return Object.assign({}, m, badgeFor(m.camera));
+        })
+      };
+    });
+    return {
+      wine: wine, wineDeep: wineDeep, wineNight: wineNight,
+      nav: nav, steps: steps, chips: chips,
+      isHome: st.screen === 'home', isAssess: st.screen === 'assess', isLibrary: st.screen === 'library',
+      isRecord: st.screen === 'record', isAbout: st.screen === 'about', isRom: st.screen === 'rom',
+      romChips: romChips, romGroups: romGroups, romCount: String(ROM_DB.length),
+      step1: st.step === 0, step2: st.step === 1, step3: st.step === 2, step4: st.step === 3, step5: st.step === 4,
+      nextLabel: st.step === 4 ? '完成，查看紀錄' : '下一步',
+      next: function () {
+        if (st.step >= 4) { self.setState({ screen: 'record' }); } else { self.setState({ step: st.step + 1 }); }
+      },
+      prev: function () {
+        if (st.step <= 0) { self.setState({ screen: 'home' }); } else { self.setState({ step: st.step - 1 }); }
+      },
+      goHome: go('home'), goAssess: go('assess'), goLibrary: go('library'), goRecord: go('record'), goAbout: go('about'), goRom: go('rom'),
+      previewCards: previewCards, testCards: testCards, testGroups: testGroups,
+      caseFindings: caseFindings,
+      bodyParts: bodyParts, bodySummary: pickedList.length ? pickedList.join('、') : '尚未選擇',
+      recCount: String(recCount), testTotal: String(TEST_LIST.length),
+      showFab: st.screen !== 'assess' && !openId,
+      goAssessStart: function () {
+        self.setState({ screen: 'assess', step: 0 });
+        try { window.scrollTo(0, 0); } catch (e) {}
+      },
+      videoOpen: !!openId,
+      modalSrc: openId ? VIDEOS[openId].src : '',
+      modalName: openId ? VIDEOS[openId].name : '', modalRegion: openId ? VIDEOS[openId].region : '',
+      closeVideo: function () { self.setState({ videoOpen: null }); },
+      libraryCards: libraryCards,
+      redFlags: [
+        { text: '會陰周圍麻木，或大小便失控？' },
+        { text: '手腳無力持續加重？' },
+        { text: '胸痛，或臉部歪斜、說話不清等中風徵象？' },
+        { text: '發燒合併劇烈疼痛，或近期有重大外傷？' }
+      ],
+      painScale: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(function (n) { return { n: String(n) }; }),
+      scoreAreas: [{ name: '肩頸' }, { name: '胸椎' }, { name: '腰背' }, { name: '髖' }],
+      analysisRows: analysisRows, noAnalysis: analysisRows.length === 0,
+      rx: [{ n: '1' }, { n: '2' }, { n: '3' }]
+    };
+  }
+}
+
+DCLite.mount(Component, {"wine": "#6B1E2A"});
+</script>
+</body>
+</html>
